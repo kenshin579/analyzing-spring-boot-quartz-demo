@@ -5,6 +5,7 @@ import com.javabypatel.demo.job.CronJob;
 import com.javabypatel.demo.job.SimpleJob;
 import com.javabypatel.demo.service.JobService;
 import com.javabypatel.demo.util.ServerResponseCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/scheduler/")
 public class JobController {
@@ -28,7 +30,7 @@ public class JobController {
 	public ServerResponse schedule(@RequestParam("jobName") String jobName,
 			@RequestParam("jobScheduleTime") @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") Date jobScheduleTime,
 			@RequestParam("cronExpression") String cronExpression) {
-		System.out.println("JobController.schedule()");
+		log.info("JobController.schedule()");
 
 		//Job Name is mandatory
 		if (jobName == null || jobName.trim().equals("")) {
@@ -63,13 +65,13 @@ public class JobController {
 
 	@RequestMapping("unschedule")
 	public void unschedule(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.unschedule()");
+		log.info("JobController.unschedule()");
 		jobService.unScheduleJob(jobName);
 	}
 
 	@RequestMapping("delete")
 	public ServerResponse delete(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.delete()");
+		log.info("JobController.delete()");
 
 		if (jobService.isJobWithNamePresent(jobName)) {
 			boolean isJobRunning = jobService.isJobRunning(jobName);
@@ -92,7 +94,7 @@ public class JobController {
 
 	@RequestMapping("pause")
 	public ServerResponse pause(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.pause()");
+		log.info("JobController.pause()");
 
 		if (jobService.isJobWithNamePresent(jobName)) {
 
@@ -117,13 +119,13 @@ public class JobController {
 
 	@RequestMapping("resume")
 	public ServerResponse resume(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.resume()");
+		log.info("JobController.resume()");
 
 		if (jobService.isJobWithNamePresent(jobName)) {
 			String jobState = jobService.getJobState(jobName);
 
 			if (jobState.equals("PAUSED")) {
-				System.out.println("Job current state is PAUSED, Resuming job...");
+				log.info("Job current state is PAUSED, Resuming job...");
 				boolean status = jobService.resumeJob(jobName);
 
 				if (status) {
@@ -145,7 +147,7 @@ public class JobController {
 	public ServerResponse updateJob(@RequestParam("jobName") String jobName,
 			@RequestParam("jobScheduleTime") @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm") Date jobScheduleTime,
 			@RequestParam("cronExpression") String cronExpression) {
-		System.out.println("JobController.updateJob()");
+		log.info("JobController.updateJob()");
 
 		//Job Name is mandatory
 		if (jobName == null || jobName.trim().equals("")) {
@@ -181,15 +183,14 @@ public class JobController {
 
 	@RequestMapping("jobs")
 	public ServerResponse getAllJobs() {
-		System.out.println("JobController.getAllJobs()");
-
 		List<Map<String, Object>> list = jobService.getAllJobs();
+		log.info("JobController.getAllJobs() size: {}", list.size());
 		return getServerResponse(ServerResponseCode.SUCCESS, list);
 	}
 
 	@RequestMapping("checkJobName")
 	public ServerResponse checkJobName(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.checkJobName()");
+		log.info("JobController.checkJobName()");
 
 		//Job Name is mandatory
 		if (jobName == null || jobName.trim().equals("")) {
@@ -202,7 +203,7 @@ public class JobController {
 
 	@RequestMapping("isJobRunning")
 	public ServerResponse isJobRunning(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.isJobRunning()");
+		log.info("JobController.isJobRunning()");
 
 		boolean status = jobService.isJobRunning(jobName);
 		return getServerResponse(ServerResponseCode.SUCCESS, status);
@@ -210,7 +211,7 @@ public class JobController {
 
 	@RequestMapping("jobState")
 	public ServerResponse getJobState(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.getJobState()");
+		log.info("JobController.getJobState()");
 
 		String jobState = jobService.getJobState(jobName);
 		return getServerResponse(ServerResponseCode.SUCCESS, jobState);
@@ -218,7 +219,7 @@ public class JobController {
 
 	@RequestMapping("stop")
 	public ServerResponse stopJob(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.stopJob()");
+		log.info("JobController.stopJob()");
 
 		if (jobService.isJobWithNamePresent(jobName)) {
 
@@ -244,7 +245,7 @@ public class JobController {
 
 	@RequestMapping("start")
 	public ServerResponse startJobNow(@RequestParam("jobName") String jobName) {
-		System.out.println("JobController.startJobNow()");
+		log.info("JobController.startJobNow()");
 
 		if (jobService.isJobWithNamePresent(jobName)) {
 
