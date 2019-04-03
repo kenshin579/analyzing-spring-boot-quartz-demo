@@ -40,7 +40,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean scheduleOneTimeJob(String jobName, Class<? extends QuartzJobBean> jobClass, Date date) {
-		log.info("Request received to scheduleJob");
+		log.debug("Request received to scheduleJob");
 
 		String jobKey = jobName;
 		String groupKey = "SampleGroup";
@@ -70,7 +70,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean scheduleCronJob(String jobName, Class<? extends QuartzJobBean> jobClass, Date date, String cronExpression) {
-		log.info("Request received to scheduleJob");
+		log.debug("Request received to scheduleJob");
 
 		String jobKey = jobName;
 		String groupKey = "SampleGroup";
@@ -99,7 +99,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean updateOneTimeJob(String jobName, Date date) {
-		log.info("Request received for updating one time job.");
+		log.debug("Request received for updating one time job.");
 
 		String jobKey = jobName;
 
@@ -123,7 +123,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean updateCronJob(String jobName, Date date, String cronExpression) {
-		log.info("Request received for updating cron job.");
+		log.debug("Request received for updating cron job.");
 
 		String jobKey = jobName;
 
@@ -148,7 +148,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean unScheduleJob(String jobName) {
-		log.info("Request received for Unscheduleding job.");
+		log.debug("Request received for Unscheduleding job.");
 
 		String jobKey = jobName;
 
@@ -170,7 +170,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean deleteJob(String jobName) {
-		log.info("Request received for deleting job.");
+		log.debug("Request received for deleting job.");
 
 		String jobKey = jobName;
 		String groupKey = "SampleGroup";
@@ -194,7 +194,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean pauseJob(String jobName) {
-		log.info("Request received for pausing job.");
+		log.debug("Request received for pausing job.");
 
 		String jobKey = jobName;
 		String groupKey = "SampleGroup";
@@ -217,7 +217,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean resumeJob(String jobName) {
-		log.info("Request received for resuming job.");
+		log.debug("Request received for resuming job.");
 
 		String jobKey = jobName;
 		String groupKey = "SampleGroup";
@@ -240,7 +240,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean startJobNow(String jobName) {
-		log.info("Request received for starting job now.");
+		log.debug("Request received for starting job now.");
 
 		String jobKey = jobName;
 		String groupKey = "SampleGroup";
@@ -297,6 +297,7 @@ public class JobServiceImpl implements JobService {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 		try {
 			Scheduler scheduler = schedulerFactoryBean.getScheduler();
+			String instanceId = scheduler.getSchedulerInstanceId();
 
 			for (String groupName : scheduler.getJobGroupNames()) {
 				for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
@@ -316,6 +317,7 @@ public class JobServiceImpl implements JobService {
 					map.put("scheduleTime", scheduleTime);
 					map.put("lastFiredTime", lastFiredTime);
 					map.put("nextFireTime", nextFireTime);
+					map.put("instanceId", instanceId);
 
 					if (isJobRunning(jobName)) {
 						map.put("jobStatus", "RUNNING");
@@ -336,8 +338,8 @@ public class JobServiceImpl implements JobService {
 					}*/
 
 					list.add(map);
-					log.info("Job details:");
-					log.info("Job Name:" + jobName + ", Group Name:" + groupName + ", Schedule Time:" + scheduleTime);
+					log.debug("Job details:");
+					log.debug("Job Name:" + jobName + ", Group Name:" + groupName + ", Schedule Time:" + scheduleTime);
 				}
 
 			}
@@ -371,7 +373,7 @@ public class JobServiceImpl implements JobService {
 	 * Get the current state of job
 	 */
 	public String getJobState(String jobName) {
-		log.info("JobServiceImpl.getJobState()");
+		log.debug("JobServiceImpl.getJobState()");
 
 		try {
 			String groupKey = "SampleGroup";
@@ -412,7 +414,7 @@ public class JobServiceImpl implements JobService {
 	 */
 	@Override
 	public boolean stopJob(String jobName) {
-		log.info("JobServiceImpl.stopJob()");
+		log.debug("JobServiceImpl.stopJob()");
 		try {
 			String jobKey = jobName;
 			String groupKey = "SampleGroup";

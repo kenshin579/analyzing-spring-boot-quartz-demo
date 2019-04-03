@@ -167,6 +167,7 @@
             <th>Job Next Fire Time</th>
             <th>Action</th>
             <th>Job Status</th>
+            <th>Instance Id</th>
         </thead>
         <tbody>
             <ng-container *ngFor="let jobRec of jobRecords;let i=index"> 
@@ -201,6 +202,7 @@
                             (click)='editJob(jobRec)'>Edit Job</button>
                     </td>
                     <td>{{jobRec.jobStatus}}</td>
+                    <td>{{jobRec.instanceId}}</td>
                 </tr>
             </ng-container>
         </tbody>
