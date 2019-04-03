@@ -78,7 +78,7 @@ public class JobServiceImpl implements JobService {
 
 		JobDetail jobDetail = JobUtil.createJob(jobClass, false, context, jobKey, groupKey);
 
-		log.info("creating trigger for key :" + jobKey + " at date :" + date);
+		log.info("creating cron trigger for key :" + jobKey + " at date :" + date);
 		Trigger cronTriggerBean = JobUtil.createCronTrigger(triggerKey, date, cronExpression, SimpleTrigger.MISFIRE_INSTRUCTION_FIRE_NOW);
 
 		try {
