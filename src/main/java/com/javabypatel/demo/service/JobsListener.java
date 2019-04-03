@@ -6,7 +6,7 @@ import org.quartz.JobListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JobsListener implements JobListener{
+public class JobsListener implements JobListener {
 
 	@Override
 	public String getName() {

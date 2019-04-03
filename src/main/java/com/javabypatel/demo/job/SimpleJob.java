@@ -1,8 +1,6 @@
 package com.javabypatel.demo.job;
 
-import java.util.List;
-import java.util.Map;
-
+import com.javabypatel.demo.service.JobService;
 import org.quartz.InterruptableJob;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -12,26 +10,28 @@ import org.quartz.UnableToInterruptJobException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import com.javabypatel.demo.service.JobService;
+import java.util.List;
+import java.util.Map;
 
-public class SimpleJob extends QuartzJobBean implements InterruptableJob{
-	
+public class SimpleJob extends QuartzJobBean implements InterruptableJob {
+
 	private volatile boolean toStopFlag = true;
-	
+
 	@Autowired
 	JobService jobService;
-	
+
 	@Override
 	protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 		JobKey key = jobExecutionContext.getJobDetail().getKey();
-		System.out.println("Simple Job started with key :" + key.getName() + ", Group :"+key.getGroup() + " , Thread Name :"+Thread.currentThread().getName());
-		
+		System.out.println(
+				"Simple Job started with key :" + key.getName() + ", Group :" + key.getGroup() + " , Thread Name :" + Thread.currentThread().getName());
+
 		System.out.println("======================================");
-		System.out.println("Accessing annotation example: "+jobService.getAllJobs());
+		System.out.println("Accessing annotation example: " + jobService.getAllJobs());
 		List<Map<String, Object>> list = jobService.getAllJobs();
-		System.out.println("Job list :"+list);
+		System.out.println("Job list :" + list);
 		System.out.println("======================================");
-		
+
 		//*********** For retrieving stored key-value pairs ***********/
 		JobDataMap dataMap = jobExecutionContext.getMergedJobDataMap();
 		String myValue = dataMap.getString("myKey");
@@ -48,15 +48,15 @@ public class SimpleJob extends QuartzJobBean implements InterruptableJob{
         YourClass yourClassObject = (YourClass) schedulerContext.get("storedObjectKey");
 		 */
 
-		while(toStopFlag){
+		while (toStopFlag) {
 			try {
-				System.out.println("Test Job Running... Thread Name :"+Thread.currentThread().getName());
+				System.out.println("Test Job Running... Thread Name :" + Thread.currentThread().getName());
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Thread: "+ Thread.currentThread().getName() +" stopped.");
+		System.out.println("Thread: " + Thread.currentThread().getName() + " stopped.");
 	}
 
 	@Override
