@@ -35,14 +35,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.47</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- PostgreSQL driver dependency -->
-	    <dependency>
-	        <groupId>org.postgresql</groupId>
-	        <artifactId>postgresql</artifactId>
-	        <version>9.4.1208</version>
-	        <scope>runtime</scope>
-	    </dependency>
+<!--	    <dependency>-->
+<!--	        <groupId>org.postgresql</groupId>-->
+<!--	        <artifactId>postgresql</artifactId>-->
+<!--	        <version>9.4.1208</version>-->
+<!--	        <scope>runtime</scope>-->
+<!--	    </dependency>-->
     	<!-- Spting data jpa dependencies -->
 	    <dependency>
 	        <groupId>org.springframework.boot</groupId>
