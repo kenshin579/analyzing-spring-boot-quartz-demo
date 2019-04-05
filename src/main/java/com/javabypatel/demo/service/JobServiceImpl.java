@@ -318,6 +318,7 @@ public class JobServiceImpl implements JobService {
 					map.put("lastFiredTime", lastFiredTime);
 					map.put("nextFireTime", nextFireTime);
 					map.put("instanceId", instanceId);
+					map.put("status", getJobState(jobName));
 
 					if (isJobRunning(jobName)) {
 						map.put("jobStatus", "RUNNING");
@@ -325,17 +326,6 @@ public class JobServiceImpl implements JobService {
 						String jobState = getJobState(jobName);
 						map.put("jobStatus", jobState);
 					}
-
-					/*					Date currentDate = new Date();
-					if (scheduleTime.compareTo(currentDate) > 0) {
-						map.put("jobStatus", "scheduled");
-
-					} else if (scheduleTime.compareTo(currentDate) < 0) {
-						map.put("jobStatus", "Running");
-
-					} else if (scheduleTime.compareTo(currentDate) == 0) {
-						map.put("jobStatus", "Running");
-					}*/
 
 					list.add(map);
 					log.debug("Job details:");

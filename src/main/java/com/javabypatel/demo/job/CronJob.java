@@ -19,22 +19,25 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class CronJob extends QuartzJobBean implements InterruptableJob {
 
-	private volatile boolean toStopFlag = true;
+	private volatile boolean isJobInterrupted = true;
+	private volatile Thread currThread;
 
 	@Autowired
 	JobService jobService;
 
 	@Override
 	protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+		currThread = Thread.currentThread();
+
+		log.info("");
+		log.info("======================================");
 		JobKey key = jobExecutionContext.getJobDetail().getKey();
-		log.info("Cron Job started with key :" + key.getName() + ", Group :" + key.getGroup() + " , Thread Name :" + Thread.currentThread().getName()
+		log.info("Cron Job started with key :" + key.getName() + ", Group :" + key.getGroup() + " , Thread Name :" + currThread.getName()
 				+ " ,Time now :" + new Date());
 
-		log.info("======================================");
 		log.info("Accessing annotation example: " + jobService.getAllJobs());
 		List<Map<String, Object>> list = jobService.getAllJobs();
 		log.info("Job list :" + list);
-		log.info("======================================");
 
 		//*********** For retrieving stored key-value pairs ***********/
 		JobDataMap dataMap = jobExecutionContext.getMergedJobDataMap();
@@ -42,18 +45,33 @@ public class CronJob extends QuartzJobBean implements InterruptableJob {
 		log.info("Value:" + myValue);
 
 		try {
-			TimeUnit.SECONDS.sleep(20);
+			for (int i = 0; i < 10; i++) {
+				System.out.print(i);
+				TimeUnit.SECONDS.sleep(1);
+			}
+			System.out.println();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} finally {
+			if (isJobInterrupted) {
+				log.info("Job " + key.getName() + " did not complete");
+			} else {
+				log.info("Job " + key.getName() + " completed at " + new Date());
+			}
 		}
 
 		log.info("Thread: " + Thread.currentThread().getName() + " stopped.");
+		log.info("======================================");
+		log.info("");
 	}
 
 	@Override
 	public void interrupt() throws UnableToInterruptJobException {
-		log.info("Stopping thread... ");
-		toStopFlag = false;
+		log.info("Interrupted thread... ");
+		isJobInterrupted = true;
+		if (currThread != null) {
+			currThread.interrupt();
+		}
 	}
 
 }

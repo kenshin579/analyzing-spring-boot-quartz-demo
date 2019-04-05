@@ -5,7 +5,7 @@
     "build": "webpack --progress",
     "build:prod": "cross-env APP_ENVIRONMENT=production webpack -p --progress",
     "postinstall": "typings install",
-    "server": "webpack-dev-server --inline --progress"
+    "server": "webpack-dev-server --inline --progress --port 6060"
   },
   "license": "MIT",
   "dependencies": {
