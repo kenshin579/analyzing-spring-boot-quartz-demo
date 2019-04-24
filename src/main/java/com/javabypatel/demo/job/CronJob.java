@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class CronJob extends QuartzJobBean implements InterruptableJob {
 
-	private volatile boolean isJobInterrupted = true;
+	private volatile boolean isJobInterrupted = false;
 	private volatile Thread currThread;
 
 	@Autowired

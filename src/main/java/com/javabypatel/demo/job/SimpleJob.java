@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class SimpleJob extends QuartzJobBean implements InterruptableJob {
 
-	private volatile boolean toStopFlag = true;
+	private volatile boolean toStopFlag = false;
 
 	@Autowired
 	JobService jobService;
